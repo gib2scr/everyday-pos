@@ -5,6 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Android 11+ (API 30+) прячет чужие пакеты друг от друга по умолчанию.
+         Без этой декларации bindService() к службе принтера Sunmi не находит её
+         и onConnected() никогда не вызывается, хотя сама служба на терминале работает. -->
+    <queries>
+        <package android:name="woyou.aidlservice.jiuiv5" />
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
