@@ -1,6 +1,8 @@
 package com.everyday.pos;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
@@ -21,7 +23,8 @@ import org.json.JSONObject;
 public class PrinterBridge {
 
     private final Context ctx;
-    private SunmiPrinterService printerService;
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private volatile SunmiPrinterService printerService;
 
     public PrinterBridge(Context ctx) {
         this.ctx = ctx.getApplicationContext();
@@ -50,19 +53,23 @@ public class PrinterBridge {
     /** Вызывается из JS: window.AndroidPrinter.printReceipt(json) */
     @JavascriptInterface
     public void printReceipt(String json) {
-        try {
-            JSONObject o = new JSONObject(json);
-            String op   = o.optString("op",   "—");
-            String date = o.optString("date", "—");
-            String time = o.optString("time", "—");
-            String rate = o.optString("rate", "—");
-            String thb  = o.optString("thb",  "0");
-            String rub  = o.optString("rub",  "0");
+        // JS-мост WebView вызывает этот метод НЕ в главном потоке —
+        // а вся печать и Toast должны идти строго в главном потоке
+        mainHandler.post(() -> {
+            try {
+                JSONObject o = new JSONObject(json);
+                String op   = o.optString("op",   "—");
+                String date = o.optString("date", "—");
+                String time = o.optString("time", "—");
+                String rate = o.optString("rate", "—");
+                String thb  = o.optString("thb",  "0");
+                String rub  = o.optString("rub",  "0");
 
-            printFormatted(op, date, time, rate, thb, rub);
-        } catch (Exception e) {
-            toast("Ошибка печати: " + e.getMessage());
-        }
+                printFormatted(op, date, time, rate, thb, rub);
+            } catch (Exception e) {
+                toast("Ошибка печати: " + e.getMessage());
+            }
+        });
     }
 
     /** Проверка из JS, доступен ли принтер (необязательно) */
@@ -132,6 +139,6 @@ public class PrinterBridge {
     }
 
     private void toast(final String msg) {
-        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
+        mainHandler.post(() -> Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show());
     }
 }
