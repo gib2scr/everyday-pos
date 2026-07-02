@@ -1,0 +1,20 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // репозиторий Sunmi (SDK принтера)
+        maven { url 'https://repo.sunmi.com/repository/maven-releases/' }
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+rootProject.name = "EverydayPOS"
+include ':app'
