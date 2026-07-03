@@ -302,8 +302,8 @@ public class PrinterBridge {
     }
 
     // мелкая марка внизу чека — растровая копия фирменного лого (res/drawable/logo_mark.png),
-    // отрисована заранее из screw mini.svg — на 58мм ленте сложный векторный контур
-    // печатается как обычная картинка, без риска потерять детали при живой отрисовке
+    // подготовлена заранее из screw black.svg (RGB без альфа-канала — критично: PNG с
+    // прозрачностью печатался термопринтером как сплошной чёрный прямоугольник)
     private Bitmap buildLogoMarkBitmap() {
         Bitmap src = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.logo_mark);
         int targetSize = 70;
