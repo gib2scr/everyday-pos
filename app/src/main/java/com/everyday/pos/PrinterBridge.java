@@ -153,7 +153,6 @@ public class PrinterBridge {
             p.printText("* * * every day is a good day * * *\n", null);
             p.lineWrap(1, null);
 
-            p.printBitmap(buildLogoMarkBitmap(), null);
             p.lineWrap(3, null);                     // отступ, чтобы чек отрезался
         } catch (RemoteException e) {
             toast("Ошибка принтера: " + e.getMessage());
@@ -164,13 +163,16 @@ public class PrinterBridge {
     private Bitmap buildSectionHeader(String text) {
         int w = 384, h = 34;
         Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bmp.eraseColor(Color.WHITE);
         Canvas c = new Canvas(bmp);
-        Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bg.setColor(Color.BLACK);
-        c.drawRect(0, 0, w, h, bg);
+        Paint border = new Paint(Paint.ANTI_ALIAS_FLAG);
+        border.setColor(Color.BLACK);
+        border.setStyle(Paint.Style.STROKE);
+        border.setStrokeWidth(2);
+        c.drawRect(1, 1, w - 1, h - 1, border);
 
         Paint text_ = new Paint(Paint.ANTI_ALIAS_FLAG);
-        text_.setColor(Color.WHITE);
+        text_.setColor(Color.BLACK);
         text_.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
         text_.setTextSize(20);
         text_.setTextAlign(Paint.Align.LEFT);
@@ -210,22 +212,25 @@ public class PrinterBridge {
     private Bitmap buildTotalBitmap(String amount) {
         int w = 384, h = 84;
         Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bmp.eraseColor(Color.WHITE);
         Canvas c = new Canvas(bmp);
-        Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bg.setColor(Color.BLACK);
-        c.drawRect(0, 0, w, h, bg);
+        Paint border = new Paint(Paint.ANTI_ALIAS_FLAG);
+        border.setColor(Color.BLACK);
+        border.setStyle(Paint.Style.STROKE);
+        border.setStrokeWidth(3);
+        c.drawRect(2, 2, w - 2, h - 2, border);
 
         Paint lbl = new Paint(Paint.ANTI_ALIAS_FLAG);
-        lbl.setColor(Color.WHITE);
+        lbl.setColor(Color.BLACK);
         lbl.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
         lbl.setTextSize(16);
         lbl.setTextAlign(Paint.Align.CENTER);
         c.drawText("К ОПЛАТЕ", w / 2f, 24, lbl);
 
         Paint amt = new Paint(Paint.ANTI_ALIAS_FLAG);
-        amt.setColor(Color.WHITE);
+        amt.setColor(Color.BLACK);
         amt.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        amt.setTextSize(36);
+        amt.setTextSize(38);
         amt.setTextAlign(Paint.Align.CENTER);
         c.drawText(amount, w / 2f, 64, amt);
         return bmp;
@@ -272,13 +277,16 @@ public class PrinterBridge {
     private Bitmap buildOkBitmap() {
         int w = 384, h = 46;
         Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bmp.eraseColor(Color.WHITE);
         Canvas c = new Canvas(bmp);
-        Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bg.setColor(Color.BLACK);
-        c.drawRect(0, 0, w, h, bg);
+        Paint border = new Paint(Paint.ANTI_ALIAS_FLAG);
+        border.setColor(Color.BLACK);
+        border.setStyle(Paint.Style.STROKE);
+        border.setStrokeWidth(2);
+        c.drawRect(1, 1, w - 1, h - 1, border);
 
         Paint check = new Paint(Paint.ANTI_ALIAS_FLAG);
-        check.setColor(Color.WHITE);
+        check.setColor(Color.BLACK);
         check.setStyle(Paint.Style.STROKE);
         check.setStrokeWidth(4);
         check.setStrokeCap(Paint.Cap.ROUND);
@@ -291,7 +299,7 @@ public class PrinterBridge {
         c.drawPath(path, check);
 
         Paint text = new Paint(Paint.ANTI_ALIAS_FLAG);
-        text.setColor(Color.WHITE);
+        text.setColor(Color.BLACK);
         text.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
         text.setTextSize(22);
         text.setTextAlign(Paint.Align.CENTER);
@@ -299,15 +307,6 @@ public class PrinterBridge {
         float baseline = h / 2f - (fm.ascent + fm.descent) / 2f;
         c.drawText("ОПЛАЧЕНО", w / 2f + 20, baseline, text);
         return bmp;
-    }
-
-    // мелкая марка внизу чека — растровая копия фирменного лого (res/drawable/logo_mark.png),
-    // подготовлена заранее из screw black.svg (RGB без альфа-канала — критично: PNG с
-    // прозрачностью печатался термопринтером как сплошной чёрный прямоугольник)
-    private Bitmap buildLogoMarkBitmap() {
-        Bitmap src = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.logo_mark);
-        int targetSize = 70;
-        return Bitmap.createScaledBitmap(src, targetSize, targetSize, true);
     }
 
     // тонкая сплошная линия-разделитель на всю ширину ленты (аккуратнее пунктира из дефисов)
