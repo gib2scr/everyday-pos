@@ -19,7 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     // Адрес нашего сайта. Меняешь тут, если поменяется домен.
-    private static final String SITE_URL = "https://eposdemo.netlify.app/";
+    // С 2026-07-25 фронт живёт на нашем Webdock (переезд с Netlify);
+    // старые сборки APK со старым адресом работают через Netlify-переходник.
+    private static final String SITE_URL = "https://epay.exchange-dimon.ru/epay/";
 
     private WebView web;
 

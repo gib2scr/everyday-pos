@@ -6,11 +6,11 @@
     android:viewportWidth="512"
     android:viewportHeight="512">
     <group
-        android:scaleX="0.62"
-        android:scaleY="0.62"
+        android:scaleX="0.84"
+        android:scaleY="0.84"
         android:translateX="256"
         android:translateY="256">
-        <group android:translateX="-363.5" android:translateY="-248.5">
+        <group android:translateX="-363.5" android:translateY="-66.5">
             <!-- EVERY -->
             <path android:fillColor="#FFFFFF" android:pathData="M237.543 37.32H199.395V46.63L244.479 46.3V61.05H179V0.08H244.479L244.562 14.83H199.395V22.9H237.543V37.32Z"/>
             <path android:fillColor="#FFFFFF" android:pathData="M288.104 41.77L310.976 0.08H331.619L299.416 61.05H276.296L244.341 0.08H266.47L288.104 41.77Z"/>
